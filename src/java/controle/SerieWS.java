@@ -132,12 +132,12 @@ public class SerieWS extends HttpServlet {
         SerieDAO dao = new SerieDAO();
         Boolean deucerto;
         String msg;
-        String pagina;
+        String pagina = null;
         RequestDispatcher destino;
         List<Serie>series;
         
           //Receber dados
-        
+         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("txtId");
         String nome = request.getParameter("txtNome");
        
@@ -202,7 +202,17 @@ public class SerieWS extends HttpServlet {
             }
         }else{
             deucerto = dao.incluir(obj);
-            pagina = "add.jsp";
+              //buscar dados
+          
+            pdao = new PlataformaDAO();
+            gdao = new GeneroDAO();
+            List<Plataforma> plataformas = pdao.listar();
+            generos = gdao.listar();
+            //enviar dados
+      
+            request.setAttribute("plataformas", plataformas);
+            request.setAttribute("generos", generos);    
+          
             if(deucerto){
                 msg = obj.getNome() + " adicionado com sucesso!";
             }else{
